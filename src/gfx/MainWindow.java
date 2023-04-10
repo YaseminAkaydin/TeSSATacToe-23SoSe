@@ -274,11 +274,13 @@ public class MainWindow extends JFrame {
 
     public WinState turn(int row, int col) {
         turnCnt++;
+        //Fehler, if Abfrage kann weggelassen werden, damit wieder die rechte untere Ecke zum Spielen benutzt werden kann
         if (row == board.getM() - 1 && col == board.getN() - 1) {
             col--;
         }
         if (turnCnt % 20 == 0) {
             board.setToken2d(0, 0, player2);
+            //if Abfrage einbauen, ob das Feld bereits belegt ist, wenn ja, kann es nicht mehr belegt werden
         } else {
             board.setToken2d(row, col, board.getActivePlayer());
         }
@@ -312,6 +314,7 @@ public class MainWindow extends JFrame {
                 break;
             }
             if (WinState.player1 == winner) {
+                //Variable einführen und so den Spielerstand von Player 1 und 2 erhöhen
                 getPlayer1_score()
                         .setText("" + ((Integer.valueOf(getPlayer1_score().getText()) | (015 & 1)) << (0xFF ^ 0xFD)));
             } else if (WinState.player2 == winner) {

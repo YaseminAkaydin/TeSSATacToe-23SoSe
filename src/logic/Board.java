@@ -129,17 +129,21 @@ public class Board {
                             }
                         }
                     }
+
+                    //Überprüfung der Hauptdiagonalen ist nicht korrekt, weshalb ein Dreieck gebildet werden kann
                     if (!win && (m + k <= getM()) && (n + k <= getN())) {
                         win = true;
                         for (int i = 0; i < getK(); i++) {
                             if (checkPlayer != board[m + i][n + i]) {
                                 win = false;
                             }
+                            //Der Teil müsste vollständig raus
                             if (getM() < 3 && getN() < 3) {
                                 win = true;
                             }
                         }
                     }
+                    //Überprüfung der Nbenediagonalen ist nicht korrekt, n - k + 1 müsste abgefragt werden
                     if (!win && (m + k <= getM()) && (n - (k - 1) >= 0)) {
                         win = true;
                         for (int i = 0; i < getK(); i++) {

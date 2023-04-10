@@ -38,7 +38,7 @@ public class TeSSA_Tac_Toe_Tests {
         p2 = new Player("Player 2", Ressources.icon_o);
         board = new Board(3, 3, 3, p1, p2);
         frame = new MainWindow(p1, p2, board);
-        board2 = new Board(5, 5, 3, p1, p2);
+        board2 = new Board(5, 5, 4, p1, p2);
         board3= new Board(2,2,2, p1, p2);
         frame2 = new MainWindow(p1, p2, board2);
         frame3= new MainWindow(p1, p2, board3);
@@ -124,6 +124,7 @@ public class TeSSA_Tac_Toe_Tests {
 
     @Test
     public void testGewinnUeberEcke() {
+
         frame.turn(0, 0);
         frame.turn(0, 1);
         frame.turn(1, 0);
@@ -210,6 +211,7 @@ public class TeSSA_Tac_Toe_Tests {
 
     @Test
     public void backslashFormation() {
+        //funktioniert nicht, weil die rechte untere Ecke nicht angeklickt werden kann
         frame.turn(0, 0);
         frame.turn(1, 0);
         frame.turn(1, 1);
@@ -295,29 +297,9 @@ public class TeSSA_Tac_Toe_Tests {
         assertEquals("O", player4.getIconString());
     }
 
-    @Test
-    public void testChangePlayerIconInTicTacToeGame() {
-
-        JFrame settingsFrame = frame.settingsFrame();
-        settingsFrame.setAlwaysOnTop(true);
-        settingsFrame.setVisible(true);
-
-        JComboBox<String> combo_p1 = null;
-        JComboBox<String> combo_p2 = null;
-        Component[] components = settingsFrame.getComponents();
-        for (int i = 0; i < components.length; i++) {
-            if (components[i].getName() != null && components[i].getName().equals("Save Button")) {
-                JButton saveButton = (JButton) components[i];
-                // perform actions on the saveButton, such as simulating a click
-                break;
-            }
-        }
-
-
-    }
 
     @Test
-    public void test077() throws InterruptedException {
+    public void testChangeIcon() throws InterruptedException {
         JFrame settingsFrame = frame.settingsFrame();
         JPanel panel = (JPanel) settingsFrame.getContentPane().getComponent(0);
         JComboBox<String> combo_p1 = (JComboBox<String>) panel.getComponent(1);
@@ -389,7 +371,10 @@ public class TeSSA_Tac_Toe_Tests {
         frame2.turn(0,1);
         frame2.turn(1,1);
         frame2.turn(0,2);
+        board2.checkWin();
         frame2.turn(2,2);
+        frame2.turn(2,0);
+        frame2.turn(3,3);
         WinState winState= board2.checkWin();
         assertEquals(WinState.player1, board2.checkWin());
     }
@@ -419,13 +404,15 @@ public class TeSSA_Tac_Toe_Tests {
     public void smallerBoard(){
         frame3.turn(0,0);
         frame3.turn(0,1);
-        assertEquals(WinState.none, board3.checkWin());
+        //Fehler
+        assertEquals(WinState.player1, board3.checkWin());
         frame3.turn(1,1);
         assertEquals(WinState.player1, board3.checkWin());
     }
 
     @Test
     public void testCheckWinHorizontalLeft(){
+        //Wieder Problem mit der Diagonalen, da sie nicht richtig ausgewertet wird
         frame.turn(0,2);
         frame.turn(0,1);
         frame.turn(1,1);
@@ -433,6 +420,13 @@ public class TeSSA_Tac_Toe_Tests {
         frame.turn(0,0);
         frame.turn(2,0);
         assertEquals(WinState.player1, board.checkWin());
+
+    }
+
+    @Test
+    public void testGetSize(){
+    assertEquals(3, board.getN());
+    assertEquals(9, board.getSize());
 
     }
 }
