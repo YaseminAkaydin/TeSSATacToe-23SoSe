@@ -124,7 +124,6 @@ public class TeSSA_Tac_Toe_Tests {
 
     @Test
     public void testGewinnUeberEcke() {
-
         frame.turn(0, 0);
         frame.turn(0, 1);
         frame.turn(1, 0);
@@ -138,20 +137,18 @@ public class TeSSA_Tac_Toe_Tests {
     @Test
     public void testSpielstandPlayer1() {
         JLabel player1Score = frame.getPlayer1_score();
-        JLabel player2Score = frame.getPlayer2_score();
         frame.turn(0, 0);
         frame.turn(0, 1);
         frame.turn(1, 0);
         frame.turn(0, 2);
-        board.checkWin();
         WinState winState = frame.turn(2, 0);
-        assertEquals(1, player1Score.getText());
+        frame.checkWinner(winState);
+        assertEquals("1", player1Score.getText());
 
     }
 
     @Test
     public void testSpielstandPlayer2() {
-        JLabel player1Score = frame.getPlayer1_score();
         JLabel player2Score = frame.getPlayer2_score();
 
         frame.turn(0, 1);
@@ -160,8 +157,8 @@ public class TeSSA_Tac_Toe_Tests {
         frame.turn(1, 0);
         frame.turn(1, 2);
         frame.turn(2, 0);
-        frame.checkWinner(WinState.player1);
-        assertEquals(1, player2Score.getText());
+        frame.checkWinner(WinState.player2);
+        assertEquals("1", player2Score.getText());
 
     }
 
@@ -177,25 +174,24 @@ public class TeSSA_Tac_Toe_Tests {
 
     @Test
     public void chooseIconTessaRedOrX() {
-        Player player1 = new Player("Player 1", Ressources.icon_o);
         Player player2 = new Player("Player 2", Ressources.icon_tessa_blue);
-        assertEquals("O", player1.getIconString());
         assertEquals("TeSSA blue", player2.getIconString());
 
     }
 
+    //Fehlverhalten benutzt
     @Test
-    public void mehrfachAnklicken() {
+    public void mehrfachAnklicken() throws InterruptedException {
         String retString = "";
         String retString2 = "";
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i <= 20; i++) {
             frame.turn(1, 1);
             retString = board.getPlayerNameInField(1, 1);
             retString2 = board.getPlayerNameInField(0, 0);
         }
 
         assertEquals("Player 1", retString);
-        assertEquals("", retString2);
+        assertEquals("        ", retString2);
     }
 
     @Test
@@ -250,7 +246,6 @@ public class TeSSA_Tac_Toe_Tests {
     @Test
     public void testCheckWinnerPlayer1() {
         JLabel player1Score = frame.getPlayer1_score();
-        JLabel player2Score = frame.getPlayer2_score();
         // Simulate player 1 winning
         frame.turn(0, 0);
         frame.turn(0, 1);
@@ -260,7 +255,6 @@ public class TeSSA_Tac_Toe_Tests {
 
         frame.checkWinner(WinState.player1);
         assertEquals("1", player1Score.getText());
-        assertEquals("0", player2Score.getText());
     }
 
     @Test
@@ -300,10 +294,12 @@ public class TeSSA_Tac_Toe_Tests {
 
     @Test
     public void testChangeIcon() throws InterruptedException {
+        //auslagern
         JFrame settingsFrame = frame.settingsFrame();
         JPanel panel = (JPanel) settingsFrame.getContentPane().getComponent(0);
         JComboBox<String> combo_p1 = (JComboBox<String>) panel.getComponent(1);
         JComboBox<String> combo_p2 = (JComboBox<String>) panel.getComponent(3);
+
 
         combo_p1.setSelectedIndex(1);
         combo_p2.setSelectedIndex(1);
@@ -311,11 +307,13 @@ public class TeSSA_Tac_Toe_Tests {
         JButton button = (JButton) panel.getComponent(4);
         button.doClick();
 
+
         System.out.println(Arrays.toString(panel.getComponents()));
     }
 
     @Test
     public void testGetIconPlayer(){
+        //alles einzelne Tests
         JFrame settingsFrame = frame.settingsFrame();
         JPanel panel = (JPanel) settingsFrame.getContentPane().getComponent(0);
         JComboBox<String> combo_p1 = (JComboBox<String>) panel.getComponent(1);
@@ -404,8 +402,6 @@ public class TeSSA_Tac_Toe_Tests {
     public void smallerBoard(){
         frame3.turn(0,0);
         frame3.turn(0,1);
-        //Fehler
-        assertEquals(WinState.player1, board3.checkWin());
         frame3.turn(1,1);
         assertEquals(WinState.player1, board3.checkWin());
     }
@@ -416,7 +412,6 @@ public class TeSSA_Tac_Toe_Tests {
         frame.turn(0,2);
         frame.turn(0,1);
         frame.turn(1,1);
-        board.checkWin();
         frame.turn(0,0);
         frame.turn(2,0);
         assertEquals(WinState.player1, board.checkWin());

@@ -7,6 +7,7 @@ public class Ressources {
             icon_o = new ImageIcon(MainWindow.class.getResource("/res/o.png")),
             icon_none = new ImageIcon(MainWindow.class.getResource("/res/blank.png")),
             icon_tessa_red = new ImageIcon(MainWindow.class.getResource("/res/tessa_r.png")),
-            icon_tessa_blue = new ImageIcon(MainWindow.class.getResource("/res/tessa_r.png"));;
+            //TessaBlue Pfad ist falsch
+            icon_tessa_blue = new ImageIcon(MainWindow.class.getResource("/res/tessa_b.png"));;
 
 }

@@ -136,15 +136,16 @@ public class Board {
                         for (int i = 0; i < getK(); i++) {
                             if (checkPlayer != board[m + i][n + i]) {
                                 win = false;
+                                break;
                             }
                             //Der Teil müsste vollständig raus
-                            if (getM() < 3 && getN() < 3) {
-                                win = true;
-                            }
+//                            if (getM() < 3 && getN() < 3) {
+//                                win = true;
+//                            }
                         }
                     }
                     //Überprüfung der Nbenediagonalen ist nicht korrekt, n - k + 1 müsste abgefragt werden
-                    if (!win && (m + k <= getM()) && (n - (k - 1) >= 0)) {
+                    if (!win && (m + k <= getM()) && (n - (k + 1) >= 0)) {
                         win = true;
                         for (int i = 0; i < getK(); i++) {
                             if (checkPlayer != board[m + i][n - i]) {
@@ -165,18 +166,19 @@ public class Board {
                             win = false;
                         }
                     }
-                    if (!win && (m + 1 < getM()) && (n + 2 < getN())) {
-                        win = true;
-                        if (checkPlayer != board[m][n]) {
-                            win = false;
-                        }
-                        if (checkPlayer != board[m][n + 2]) {
-                            win = false;
-                        }
-                        if (checkPlayer != board[m + 1][n + 1]) {
-                            win = false;
-                        }
-                    }
+                    // Fehler wegen der V Struktur, müsste raus (kompletter Zweig)
+//                    if (!win && (m + 1 < getM()) && (n + 2 < getN())) {
+//                        win = true;
+//                        if (checkPlayer != board[m][n]) {
+//                            win = false;
+//                        }
+//                        if (checkPlayer != board[m][n + 2]) {
+//                            win = false;
+//                        }
+//                        if (checkPlayer != board[m + 1][n + 1]) {
+//                            win = false;
+//                        }
+//                    }
                     if (win) {
                         return WinState.values()[checkPlayer];
                     }

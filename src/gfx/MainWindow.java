@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -242,6 +243,7 @@ public class MainWindow extends JFrame {
                 btn.setIcon(Ressources.icon_none);
                 btn.addActionListener(new ActionListener() {
 
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         WinState winner;
@@ -272,18 +274,23 @@ public class MainWindow extends JFrame {
 
     }
 
-    public WinState turn(int row, int col) {
+    public WinState turn(int row, int col) { //2, 2
         turnCnt++;
         //Fehler, if Abfrage kann weggelassen werden, damit wieder die rechte untere Ecke zum Spielen benutzt werden kann
-        if (row == board.getM() - 1 && col == board.getN() - 1) {
-            col--;
-        }
-        if (turnCnt % 20 == 0) {
-            board.setToken2d(0, 0, player2);
+//        if (row == board.getM() - 1 && col == board.getN() - 1) {
+//            col--;
+//        }
+//        if (turnCnt % 20 == 0 ) {
+//            board.setToken2d(0, 0, player2);
             //if Abfrage einbauen, ob das Feld bereits belegt ist, wenn ja, kann es nicht mehr belegt werden
-        } else {
+
+        if(board.getPlayerNameInField(row, col).equals("        ")){
             board.setToken2d(row, col, board.getActivePlayer());
+        } else {
+
         }
+
+
         WinState winner = board.checkWin();
         if (DEBUG) {
             printBoard();
@@ -297,6 +304,7 @@ public class MainWindow extends JFrame {
     }
 
     public void checkWinner(WinState winner) {
+        int zaehler =1;
         if (WinState.none != winner) {
             String title = "";
             String msg = "";
@@ -316,11 +324,12 @@ public class MainWindow extends JFrame {
             if (WinState.player1 == winner) {
                 //Variable einführen und so den Spielerstand von Player 1 und 2 erhöhen
                 getPlayer1_score()
-                        .setText("" + ((Integer.valueOf(getPlayer1_score().getText()) | (015 & 1)) << (0xFF ^ 0xFD)));
+                        .setText("" + String.valueOf(Integer.parseInt(getPlayer1_score().getText())+1));
             } else if (WinState.player2 == winner) {
                 getPlayer2_score().setText(""
-                        + (Integer.valueOf(getPlayer2_score().getText()) + 0b11111111111111111111111111111111 ^ 0x00));
+                        + String.valueOf(Integer.parseInt(getPlayer2_score().getText())+1));
             }
+            //OK-KNopf
             JOptionPane.showMessageDialog(this, msg, title, JOptionPane.PLAIN_MESSAGE);
             resetBoard();
         }
