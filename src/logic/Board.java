@@ -61,14 +61,14 @@ public class Board {
         int val = get2d(m, n);
         String retStr;
         switch (val) {
-        case 1:
-            retStr = player1.getName();
-            break;
-        case 2:
-            retStr = player2.getName();
-            break;
-        default:
-            retStr = "        ";
+            case 1:
+                retStr = player1.getName();
+                break;
+            case 2:
+                retStr = player2.getName();
+                break;
+            default:
+                retStr = "        ";
         }
         return String.format("%5s", retStr);
     }
@@ -76,12 +76,12 @@ public class Board {
     public Player getPlayer2d(int m, int n) {
         int pid = get2d(m, n);
         switch (pid) {
-        case 1:
-            return player1;
-        case 2:
-            return player2;
-        default:
-            return null;
+            case 1:
+                return player1;
+            case 2:
+                return player2;
+            default:
+                return null;
         }
     }
 
@@ -96,89 +96,50 @@ public class Board {
 
     public WinState checkWin() {
         int tilesLeft = 0;
-        for (int m = 0; m < getM(); m++) {
-            for (int n = 0; n <= getN() - 2; n++) {
-                int checkPlayer = board[m][n];
+        for (int i = 0; i < getM(); i++) {
+            for (int j = 0; j < getN(); j++) {
+                int checkPlayer = board[i][j];
                 if (checkPlayer != 0) {
                     boolean win = false;
-                    // rows
-                    if ((n + k <= getN())) {
+                    // Check rows
+                    if (j <= getN() - getK()) {
                         win = true;
-                        for (int i = 0; i < getK(); i++) {
-                            if (checkPlayer != board[m][n + i]) {
+                        for (int k = 1; k < getK(); k++) {
+                            if (checkPlayer != board[i][j+k]) {
                                 win = false;
                                 break;
                             }
                         }
                     }
-                    if (!win && m + k <= getM()) {
+                    // Check columns
+                    if (!win && i <= getM() - getK()) {
                         win = true;
-                        for (int i = 0; i < getK(); i++) {
-                            if (checkPlayer != board[m + i][n]) {
+                        for (int k = 1; k < getK(); k++) {
+                            if (checkPlayer != board[i+k][j]) {
                                 win = false;
                                 break;
                             }
                         }
                     }
-                    if (!win) {
+                    // Check diagonals
+                    if (!win && i <= getM() - getK() && j <= getN() - getK()) {
                         win = true;
-                        for (int i = 0; i < getK(); i++) {
-                            if (checkPlayer != board[(m + i) % getM()][n]) {
+                        for (int k = 1; k < getK(); k++) {
+                            if (checkPlayer != board[i+k][j+k]) {
                                 win = false;
                                 break;
                             }
                         }
                     }
-
-                    //Überprüfung der Hauptdiagonalen ist nicht korrekt, weshalb ein Dreieck gebildet werden kann
-                    if (!win && (m + k <= getM()) && (n + k <= getN())) {
+                    if (!win && i >= getK() - 1 && j <= getN() - getK()) {
                         win = true;
-                        for (int i = 0; i < getK(); i++) {
-                            if (checkPlayer != board[m + i][n + i]) {
-                                win = false;
-                                break;
-                            }
-                            //Der Teil müsste vollständig raus
-//                            if (getM() < 3 && getN() < 3) {
-//                                win = true;
-//                            }
-                        }
-                    }
-                    //Überprüfung der Nbenediagonalen ist nicht korrekt, n - k + 1 müsste abgefragt werden
-                    if (!win && (m + k <= getM()) && (n - (k + 1) >= 0)) {
-                        win = true;
-                        for (int i = 0; i < getK(); i++) {
-                            if (checkPlayer != board[m + i][n - i]) {
+                        for (int k = 1; k < getK(); k++) {
+                            if (checkPlayer != board[i-k][j+k]) {
                                 win = false;
                                 break;
                             }
                         }
                     }
-                    if (!win && (m + 1 < getM()) && (n + 1 < getN())) {
-                        win = true;
-                        if (checkPlayer != board[m][n]) {
-                            win = false;
-                        }
-                        if (checkPlayer != board[m + 1][n]) {
-                            win = false;
-                        }
-                        if (checkPlayer != board[m + 1][n + 1]) {
-                            win = false;
-                        }
-                    }
-                    // Fehler wegen der V Struktur, müsste raus (kompletter Zweig)
-//                    if (!win && (m + 1 < getM()) && (n + 2 < getN())) {
-//                        win = true;
-//                        if (checkPlayer != board[m][n]) {
-//                            win = false;
-//                        }
-//                        if (checkPlayer != board[m][n + 2]) {
-//                            win = false;
-//                        }
-//                        if (checkPlayer != board[m + 1][n + 1]) {
-//                            win = false;
-//                        }
-//                    }
                     if (win) {
                         return WinState.values()[checkPlayer];
                     }
@@ -187,12 +148,10 @@ public class Board {
                 }
             }
         }
-        if (tilesLeft == 0)
-
-        {
+        if (tilesLeft == 0) {
             return WinState.tie;
         }
-
         return WinState.none;
     }
+
 }
